@@ -1,0 +1,40 @@
+<html lang="en">
+    <head>
+        <title>UTC-Sheffield Algorave | Audio</title>
+    </head>
+    <body>
+        <noscript>
+            <p>Sorry, this page requires JavaScript to work</p>
+        </noscript>
+        <h1>UTC-Sheffield Algorave | Audio</h1>
+        <p>
+            Audio only recordings of our <a href="https://youtube.com/@alograve-UTCsheffield">live coding streams</a>.
+        </p>
+        <div id="audio-container">
+        </div>
+        <script>
+            async function main() {
+                const res = await fetch(`${location.protocol}//${location.host}/tracks`)
+                const tracks = await res.json()
+                var container = document.getElementById("audio-container");
+                tracks.tracks.forEach((track) => {
+                    // add container
+                    const trackContainer = document.createElement("div");
+                    // add title element
+                    const title = document.createElement("h2");
+                    const str = track.replace(`Audio-`, ``).replace(`.mp3`, ``);
+                    title.appendChild(document.createTextNode(str));
+                    trackContainer.appendChild(title);
+                    // add audio element
+                    const audio = document.createElement("audio");
+                    audio.setAttribute("controls", "");
+                    audio.setAttribute("src", `/tracks/${track.replace(`.mp3`, ``)}`);
+                    trackContainer.appendChild(audio);
+
+                    container.appendChild(trackContainer);
+                });
+            }
+            main();
+        </script>
+    </body>
+</html>
