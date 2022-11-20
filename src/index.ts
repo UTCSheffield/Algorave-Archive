@@ -1,5 +1,5 @@
 import "dotenv/config"
-import "./webserver.js"
+import "./webserverModule.js"
 import { schedule } from "node-cron";
 import downloadModule from "./downloadModule.js"
 
