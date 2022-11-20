@@ -8,6 +8,7 @@ function getVideoList() {
 }
 getVideoList().then((res) => {
   res.items.forEach((item) => {
+    if (!item.id) return;
     console.log(`Fetched Video ${item.id.videoId}`);
     processDownload(item.id.videoId)
   })

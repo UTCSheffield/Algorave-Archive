@@ -7,14 +7,18 @@ export default function processDownload(vidID: string) {
             console.log("Downloading Video")
             const ytdl = spawn("youtube-dl", [`-o`, `${process.cwd()}/output/Video-%(id)s.%(ext)s`, `https://www.youtube.com/watch?v=${vidID}`]);
             ytdl.stdout.on("data", (data) => {
-            console.log(`[YTDL] stdout: ${data}`);
+            console.log(`[YTDL] [${vidID}] stdout: ${data}`);
             });
             ytdl.stderr.on("data", (data) => {
-                console.error(`[YTDL] stderr: ${data}`);
+                console.error(`[YTDL] [${vidID}] stderr: ${data}`);
             });
             ytdl.on('close', (code) => {
-                console.log(`[YTDL] child process exited with code ${code}`);
-                stripVideo(vidID);
+                console.log(`[YTDL] [${vidID}] child process exited with code ${code}`);
+                if (code === 0) {
+                    stripVideo(vidID);
+                } else {
+                    return
+                }
             });
         } else {
             console.log("the Video is already downloaded");
