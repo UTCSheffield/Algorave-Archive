@@ -3,9 +3,9 @@ import { existsSync } from 'node:fs';
 import ffmpeg from './ffmpeg.js';
 export default function processDownload(vidID: string) {
 	try {
-		if (!existsSync(`${process.cwd()}/output/Video-${vidID}.mp4`)) {
+		if (!existsSync(`${process.cwd()}/output/Audio-${vidID}.m4a`)) {
 			console.log('Downloading Video');
-			const ytdl = spawn('youtube-dl', [`-o`, `${process.cwd()}/output/Video-%(id)s.%(ext)s`, `https://www.youtube.com/watch?v=${vidID}`]);
+			const ytdl = spawn('youtube-dl', [`-o`, `${process.cwd()}/output/Audio-%(id)s.%(ext)s`, `https://www.youtube.com/watch?v=${vidID}`, '-f', '140']);
 			ytdl.stdout.on('data', (data) => {
 				console.log(`[YTDL] [${vidID}] stdout: ${data}`);
 			});
@@ -22,7 +22,7 @@ export default function processDownload(vidID: string) {
 			});
 		} else {
 			console.log('the Video is already downloaded');
-			stripVideo(vidID);
+ 			stripVideo(vidID);
 		}
 	} catch (err) {
 		console.error(err);
@@ -32,11 +32,12 @@ function stripVideo(vidID: string) {
 	try {
 		if (!existsSync(`${process.cwd()}/output/Audio-${vidID}.mp3`)) {
 			console.log('Stripping Video');
-			ffmpeg().input(`${process.cwd()}/output/Video-${vidID}.mp4`).save(`${process.cwd()}/output/Audio-${vidID}.mp3`);
+			ffmpeg().input(`${process.cwd()}/output/Audio-${vidID}.m4a`).save(`${process.cwd()}/output/Audio-${vidID}.mp3`);
 		} else {
 			console.log('the Video is already stripped');
 		}
 	} catch (err) {
-		console.error(err);
+		console.log("stripping didn't work...")
+		return
 	}
 }
