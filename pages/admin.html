@@ -1,0 +1,24 @@
+<html lang="en">
+	<head>
+		<title>UTC-Sheffield Algorave | Audio</title>
+	</head>
+	<body>
+		<noscript>
+			<p>Sorry, this page requires JavaScript to work</p>
+		</noscript>
+        <h1>Commands</h1>
+        <button onclick="requestReDownload()">Request ReDownload</button>
+        <script>
+            async function requestReDownload() {
+                const res = await fetch(`${location.protocol}//${location.host}/admin/re-download`, {
+                    method: 'POST',
+                });
+                if (res.status === 200) {
+                    alert('Re-download request sent');
+                } else {
+                    alert('Error sending re-download request');
+                }
+            }
+        </script>
+    </body>
+</html>

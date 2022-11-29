@@ -1,12 +1,20 @@
 import express from 'express';
 import readOutputDir from './lib/webserver/readOutputDir.js';
 import cors from 'cors';
+import downloadModule from './downloadModule.js';
 
 const app = express();
 app.use(cors());
 
 app.get('/', (_req, res) => {
 	res.sendFile('index.html', { root: `${process.cwd()}/pages/` });
+});
+app.get('/admin', (_req, res) => {
+	res.sendFile('admin.html', { root: `${process.cwd()}/pages/` });
+});
+app.post('/admin/re-download', (_req, res) => {
+	downloadModule()
+	res.status(200).send('OK');
 });
 
 app.get('/tracks/', (_req, res) => {
