@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import ffmpeg from './ffmpeg.js';
+import metadataDB from './metadataDB.js';
 export default function processDownload(vidID: string) {
 	try {
 		if (!existsSync(`${process.cwd()}/output/Audio-${vidID}.m4a`)) {
@@ -33,8 +34,10 @@ function stripVideo(vidID: string) {
 		if (!existsSync(`${process.cwd()}/output/Audio-${vidID}.mp3`)) {
 			console.log('Stripping Video');
 			ffmpeg().input(`${process.cwd()}/output/Audio-${vidID}.m4a`).save(`${process.cwd()}/output/Audio-${vidID}.mp3`);
+			new metadataDB().grabMetadata(vidID);
 		} else {
 			console.log('the Video is already stripped');
+			new metadataDB().grabMetadata(vidID);
 		}
 	} catch (err) {
 		console.log("stripping didn't work...")

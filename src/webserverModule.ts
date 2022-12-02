@@ -2,6 +2,7 @@ import express from 'express';
 import readOutputDir from './lib/webserver/readOutputDir.js';
 import cors from 'cors';
 import downloadModule from './downloadModule.js';
+import { db } from './lib/db.js';
 
 const app = express();
 app.use(cors());
@@ -22,6 +23,14 @@ app.get('/tracks/', (_req, res) => {
 		tracks: readOutputDir()
 	});
 });
+
+app.get('/tracks/metadata/:id', (req, res) => {
+	const { id } = req.params;
+	(async () => {
+		const data = await db.get(`metadata_${id}`);
+		res.status(200).json(data);
+	})()
+})
 
 app.get('/tracks/:id', (req, res) => {
 	const { id } = req.params;

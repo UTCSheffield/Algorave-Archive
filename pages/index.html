@@ -1,6 +1,7 @@
 <html lang="en">
 	<head>
 		<title>UTC-Sheffield Algorave Archiver</title>
+		<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 	</head>
 	<body>
 		<noscript>
@@ -11,24 +12,36 @@
 		<div id="audio-container"></div>
 		<script>
 			async function main() {
-				const res = await fetch(`${location.protocol}//${location.host}/tracks`);
-				const tracks = await res.json();
+				const tracksRes = await fetch(`${location.protocol}//${location.host}/tracks`);
+				const tracks = await tracksRes.json();
 				var container = document.getElementById('audio-container');
 				tracks.tracks.forEach((track) => {
-					// add container
-					const trackContainer = document.createElement('div');
-					// add title element
-					const title = document.createElement('h2');
-					const str = track.replace(`Audio-`, ``).replace(`.mp3`, ``);
-					title.appendChild(document.createTextNode(str));
-					trackContainer.appendChild(title);
-					// add audio element
-					const audio = document.createElement('audio');
-					audio.setAttribute('controls', '');
-					audio.setAttribute('src', `/tracks/${track.replace(`.mp3`, ``)}`);
-					trackContainer.appendChild(audio);
-
-					container.appendChild(trackContainer);
+					const metadata = (async () => {
+						const metadataRes = await fetch(`${location.protocol}//${location.host}/tracks/metadata/${track.replace(`Audio-`, ``).replace('.mp3', '')}`);
+						const metadata = await metadataRes.json();
+						return metadata;
+					})().then((data) => {
+						// add container
+						const trackContainer = document.createElement('div');
+						// add title element
+						const title = document.createElement('h2');
+						title.appendChild(document.createTextNode(data.title));
+						trackContainer.appendChild(title);
+						// add description element
+						const description = document.createElement('p');
+						description.appendChild(document.createTextNode(data.description));
+						trackContainer.appendChild(description);
+						// add Published Date
+						const publishedAt = document.createElement('p');
+						publishedAt.appendChild(document.createTextNode(`Published at ${dayjs(data.publishedAt).format('DD, MM, YYYY')}`));
+						trackContainer.appendChild(publishedAt);
+						// add audio element
+						const audio = document.createElement('audio');
+						audio.setAttribute('controls', '');
+						audio.setAttribute('src', `/tracks/${track.replace(`.mp3`, ``)}`);
+						trackContainer.appendChild(audio);
+						container.appendChild(trackContainer);
+					});
 				});
 			}
 			main();
