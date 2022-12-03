@@ -14,7 +14,7 @@ app.get('/admin', (_req, res) => {
 	res.sendFile('admin.html', { root: `${process.cwd()}/pages/` });
 });
 app.post('/admin/re-download', (_req, res) => {
-	downloadModule()
+	downloadModule();
 	res.status(200).send('OK');
 });
 
@@ -29,8 +29,8 @@ app.get('/tracks/metadata/:id', (req, res) => {
 	(async () => {
 		const data = await db.get(`metadata_${id}`);
 		res.status(200).json(data);
-	})()
-})
+	})();
+});
 
 app.get('/tracks/:id', (req, res) => {
 	const { id } = req.params;

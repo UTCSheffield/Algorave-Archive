@@ -5,4 +5,3 @@ import { schedule } from 'node-cron';
 import downloadModule from './downloadModule.js';
 
 schedule('0 17 * * TUE', downloadModule);
-

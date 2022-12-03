@@ -17,7 +17,9 @@
 				var container = document.getElementById('audio-container');
 				tracks.tracks.forEach((track) => {
 					const metadata = (async () => {
-						const metadataRes = await fetch(`${location.protocol}//${location.host}/tracks/metadata/${track.replace(`Audio-`, ``).replace('.mp3', '')}`);
+						const metadataRes = await fetch(
+							`${location.protocol}//${location.host}/tracks/metadata/${track.replace(`Audio-`, ``).replace('.mp3', '')}`
+						);
 						const metadata = await metadataRes.json();
 						return metadata;
 					})().then((data) => {

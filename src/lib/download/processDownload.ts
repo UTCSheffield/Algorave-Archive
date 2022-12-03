@@ -6,7 +6,13 @@ export default function processDownload(vidID: string) {
 	try {
 		if (!existsSync(`${process.cwd()}/output/Audio-${vidID}.m4a`)) {
 			console.log('Downloading Video');
-			const ytdl = spawn('youtube-dl', [`-o`, `${process.cwd()}/output/Audio-%(id)s.%(ext)s`, `https://www.youtube.com/watch?v=${vidID}`, '-f', '140']);
+			const ytdl = spawn('youtube-dl', [
+				`-o`,
+				`${process.cwd()}/output/Audio-%(id)s.%(ext)s`,
+				`https://www.youtube.com/watch?v=${vidID}`,
+				'-f',
+				'140'
+			]);
 			ytdl.stdout.on('data', (data) => {
 				console.log(`[YTDL] [${vidID}] stdout: ${data}`);
 			});
@@ -23,7 +29,7 @@ export default function processDownload(vidID: string) {
 			});
 		} else {
 			console.log('the Video is already downloaded');
- 			stripVideo(vidID);
+			stripVideo(vidID);
 		}
 	} catch (err) {
 		console.error(err);
@@ -40,7 +46,7 @@ function stripVideo(vidID: string) {
 			new metadataDB().grabMetadata(vidID);
 		}
 	} catch (err) {
-		console.log("stripping didn't work...")
-		return
+		console.log("stripping didn't work...");
+		return;
 	}
 }
