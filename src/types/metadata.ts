@@ -6,5 +6,6 @@ export interface Imetadata {
         width: number;
         height: number;
     }
+    id: string;
     publishedAt: string;
 }
